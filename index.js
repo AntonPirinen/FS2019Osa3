@@ -6,6 +6,7 @@ var morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
 
+
 app.use(cors())
 app.use(express.static('build'))
 app.use(bodyParser.json())
@@ -43,22 +44,7 @@ app.use(morgan(function (tokens, req, res) {
   app.post('/api/persons', (request, response, next) => {
     const body = request.body
     console.log(body)
-  
-    if (!body.name) {
-      return response.status(400).json({
-        error: 'name missing'
-      })
-    } else if (!body.number) {
-      return response.status(400).json({
-        error: 'number missing'
-      })
-    } //else if (Person.find({ "name": body.name })) {
-      //console.log(Person.find({ "name": body.name }))
-      //return response.status(400).json({
-        error: 'person is already included'
-      //}) 
-    //}
-  
+
     const person = new Person({
       name: body.name,
       number: body.number
@@ -116,7 +102,9 @@ const errorHandler = (error, request, response, next) => {
     console.error(error.message)
     if (error.name === 'CastError' && error.kind == 'ObjectId') {
       return response.status(400).send({ error: 'malformatted id' })
-    } 
+    } else if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+    }
     next(error)
   }
 app.use(errorHandler)
