@@ -1,7 +1,7 @@
-POST https://guarded-caverns-95158.herokuapp.com/api/persons HTTP/1.1
+POST http://localhost:3001/api/persons HTTP/1.1
 content-type: application/json
 
 {
-    "name": "test5dseferi",
+    "name": "anna",
     "number": "123535"
 }
